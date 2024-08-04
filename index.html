@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zalgo Text Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1e1e2f;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            color: #e91e63;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            max-width: 600px;
+            height: 100px;
+            padding: 10px;
+            border: 2px solid #e91e63;
+            border-radius: 8px;
+            background-color: #2a2a40;
+            color: #fff;
+            font-size: 16px;
+            resize: none;
+            outline: none;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            border-color: #ff4081;
+        }
+
+        #zalgo-settings {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            max-width: 600px;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            background: #444;
+            outline: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #e91e63;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #ff4081;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #e91e63;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #ff4081;
+            transform: translateY(-2px);
+        }
+
+        #zalgo-output {
+            margin-top: 30px;
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            background-color: #2a2a40;
+            border-radius: 8px;
+            border: 2px solid #e91e63;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+            font-size: 24px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            transition: border-color 0.3s;
+        }
+
+        #zalgo-output:hover {
+            border-color: #ff4081;
+        }
+    </style>
+</head>
+<body>
+    <h1>Zalgo Text Generator</h1>
+    <textarea id="input-text" placeholder="Enter your text here..."></textarea>
+    <div id="zalgo-settings">
+        <label for="zalgo-intensity">Zalgo Intensity: <span id="intensity-value">10</span></label>
+        <input type="range" id="zalgo-intensity" min="1" max="999" value="10">
+        <button onclick="generateZalgo()">Generate Zalgo Text</button>
+    </div>
+    <div id="zalgo-output"></div>
+
+    <script>
+        const zalgoChars = {
+            up: ["̍", "̎", "̄", "̅", "̿", "̑", "̆", "̐", "͒", "͗", "͑", "̇", "̈", "̊", "͂", "̓", "̈", "͊", "͋", "͌", "̃", "̂", "̌", "͐", "̀", "́", "̋", "̏", "̒", "̓", "̔", "̽", "̉", "ͣ", "ͤ", "ͥ", "ͦ", "ͧ", "ͨ", "ͩ", "ͪ", "ͫ", "ͬ", "ͭ", "ͮ", "ͯ", "̾", "͛", "͆", "̚"],
+            middle: ["̕", "̛", "̀", "́", "͘", "̡", "̢", "̧", "̨", "̴", "̵", "̶", "͜", "͝", "͞", "͟", "͠", "͢", "̸", "̷", "͡", "҉"],
+            down: ["̖", "̗", "̘", "̙", "̜", "̝", "̞", "̟", "̠", "̤", "̥", "̦", "̩", "̪", "̫", "̬", "̭", "̮", "̯", "̰", "̱", "̲", "̳", "̹", "̺", "̻", "̼", "ͅ", "͇", "͈", "͉", "͍", "͎", "͓", "͔", "͕", "͖", "͙", "͚", "̣"]
+        };
+
+        function getRandomZalgoChar(type) {
+            const chars = zalgoChars[type];
+            return chars[Math.floor(Math.random() * chars.length)];
+        }
+
+        function generateZalgoText(text, intensity) {
+            return text.split('').map(char => {
+                let result = char;
+                for (let i = 0; i < intensity; i++) {
+                    if (Math.random() > 0.5) result += getRandomZalgoChar('up');
+                    if (Math.random() > 0.5) result += getRandomZalgoChar('middle');
+                    if (Math.random() > 0.5) result += getRandomZalgoChar('down');
+                }
+                return result;
+            }).join('');
+        }
+
+        function generateZalgo() {
+            const text = document.getElementById('input-text').value;
+            const intensity = document.getElementById('zalgo-intensity').value;
+            const zalgoText = generateZalgoText(text, intensity);
+            document.getElementById('zalgo-output').textContent = zalgoText;
+            document.getElementById('intensity-value').textContent = intensity;
+        }
+    </script>
+</body>
+</html>
